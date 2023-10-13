@@ -1,6 +1,6 @@
 {
-    "name": "My YT Bookmarks",
-    "version": "1.0",
+    "name": "My Netflix ",
+    "version": "0.1.0",
     "description": "Saving timestamps in YT videos",
     "permissions": ["storage", "tabs"],
     "host_permissions": ["https://*.youtube.com/*"],
@@ -34,4 +34,4 @@
       "default_popup": "popup.html"
     },
     "manifest_version": 3
-}
+  }
