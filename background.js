@@ -1,11 +1,8 @@
-chrome.tabs.onUpdated.addListener((tabId, tab) => {
-  if (tab.url && tab.url.includes("youtube.com/watch")) {
-    const queryParameters = tab.url.split("?")[1];
-    const urlParameters = new URLSearchParams(queryParameters);
+chrome.webNavigation.onCompleted.addListener((details) => {
+  // This code runs when a page has finished loading or updated.
+  // const tabId = details.tabId;
 
-    chrome.tabs.sendMessage(tabId, {
-      type: "NEW",
-      videoId: urlParameters.get("v"),
-    });
-  }
+  // Add your code to be executed when a page updates here.
+  // console.log(`Page updated in tab ${tabId}.`);
+  console.log("PAGE UPDATED");
 });
