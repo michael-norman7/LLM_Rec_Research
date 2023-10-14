@@ -1,8 +1,7 @@
-chrome.webNavigation.onCompleted.addListener((details) => {
-  // This code runs when a page has finished loading or updated.
-  // const tabId = details.tabId;
-
-  // Add your code to be executed when a page updates here.
-  // console.log(`Page updated in tab ${tabId}.`);
-  console.log("PAGE UPDATED");
-});
+// chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+//   console.log(info.status);
+//   if (info.url || info.status === "loading") {
+//     const url = info.url || tab.pendingUrl || tab.url;
+//     console.log(url); // prints in the *background* console
+//   }
+// });

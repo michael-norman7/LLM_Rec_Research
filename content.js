@@ -5,16 +5,11 @@
     });
   }
 
-  window.scrollTo(0, document.body.scrollHeight);
-  await delay(2000);
-  window.scrollTo(0, document.body.scrollHeight);
-  window.scrollTo(0, -document.body.scrollHeight);
+  await delay(5000);
 
   let currentTitles = [...document.getElementsByClassName("fallback-text")];
 
-  // currentTitles.forEach((title) => {
-  //   console.log(title.innerHTML);
-  // });
-
-  // console.log(document.getElementsByClassName("fallback-text")[0].innerHTML);
+  currentTitles.forEach((title, idx) => {
+    console.log(idx + 1, title.innerHTML);
+  });
 })();
