@@ -1,4 +1,16 @@
-const addTitles = (titles, title) => {
+import { getActiveTabURL } from "./utils.js";
+
+const onLoad = async (e) => {
+  console.log("Loading page...");
+
+  const activeTab = await getActiveTabURL();
+
+  chrome.tabs.sendMessage(activeTab.id, {
+    type: "LOAD",
+  });
+};
+
+const addTitle = (titles, title) => {
   const titleElement = document.createElement("div");
 
   titleElement.textContent = title.desc;
@@ -14,7 +26,7 @@ const viewTitles = (currentTitles = []) => {
   if (currentTitles.length > 0) {
     for (let i = 0; i < currentTitles.length; i++) {
       const title = currentTitles[i];
-      addNewBookmark(titlesElement, title);
+      addTitle(titlesElement, title);
     }
   } else {
     titlesElement.innerHTML = '<i class="row">No titles to show</i>';
@@ -30,11 +42,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (activeTab.url.includes("netflix.com/browse")) {
     chrome.storage.sync.get([currentVideo], (data) => {
-      const currentVideoBookmarks = data[currentVideo]
+      const currentTitles = data[currentVideo]
         ? JSON.parse(data[currentVideo])
         : [];
 
-      viewBookmarks(currentVideoBookmarks);
+      viewTitles(currentVideoBookmarks);
     });
   } else {
     const container = document.getElementsByClassName("container")[0];

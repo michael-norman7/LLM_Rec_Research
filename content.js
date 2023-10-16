@@ -1,4 +1,5 @@
 (async () => {
+  // TEMP UNTIL WAIT FUNC FIGURED OUT
   async function delay(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
