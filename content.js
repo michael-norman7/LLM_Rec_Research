@@ -6,7 +6,11 @@
     });
   }
 
-  await delay(5000);
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("RUN");
+  });
+
+  await delay(3000);
 
   let currentTitles = [...document.getElementsByClassName("fallback-text")];
 
