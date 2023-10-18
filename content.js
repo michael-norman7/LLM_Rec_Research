@@ -1,6 +1,14 @@
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  const text = message.text;
+console.log("run");
+
+const elements = [...document.getElementsByClassName("fallback-text")];
+console.log("load");
+
+elements.forEach((title, idx) => {
+  console.log(idx + 1, title.innerHTML);
 });
+
+const text = elements.map((element) => element.textContent);
+chrome.runtime.sendMessage({ text });
 
 // (async () => {
 //   // TEMP UNTIL WAIT FUNC FIGURED OUT

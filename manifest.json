@@ -1,38 +1,20 @@
 {
   "name": "Netflix LLM Recommendations",
-  "version": "0.1.0",
-  "description": "Using ChatGPT to recommend Netflix shows.",
+  "version": "1.0",
+  "manifest_version": 3,
   "permissions": ["storage", "tabs", "webNavigation", "activeTab"],
-  "host_permissions": ["https://*.netflix.com/*"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["https://*.netflix.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_end"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "assets/bookmark.png",
-        "assets/play.png",
-        "assets/delete.png",
-        "assets/save.png"
-      ],
-      "matches": ["https://*.netflix.com/*"]
+      "js": ["content.js"]
     }
   ],
   "action": {
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/ext-icon.png",
-      "24": "assets/ext-icon.png",
-      "32": "assets/ext-icon.png"
-    },
-    "default_title": "Netflix LLM Recommendations",
-    "default_popup": "popup.html"
-  },
-  "manifest_version": 3
+      "48": "assets/ext-icon.png",
+      "128": "assets/ext-icon.png"
+    }
+  }
 }
