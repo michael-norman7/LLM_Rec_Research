@@ -1,20 +1,26 @@
-(async () => {
-  // TEMP UNTIL WAIT FUNC FIGURED OUT
-  async function delay(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  const text = message.text;
+});
 
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("RUN");
-  });
+// (async () => {
+//   // TEMP UNTIL WAIT FUNC FIGURED OUT
+//   async function delay(ms) {
+//     return new Promise((resolve) => {
+//       setTimeout(resolve, ms);
+//     });
+//   }
 
-  await delay(3000);
+//   document.addEventListener("DOMContentLoaded", () => {
+//     console.log("RUN");
+//   });
 
-  let currentTitles = [...document.getElementsByClassName("fallback-text")];
+//   await delay(5000);
 
-  currentTitles.forEach((title, idx) => {
-    console.log(idx + 1, title.innerHTML);
-  });
-})();
+//   let currentTitles = [...document.getElementsByClassName("fallback-text")];
+
+//   // currentTitles.forEach((title, idx) => {
+//   //   console.log(idx + 1, title.innerHTML);
+//   // });
+
+//   chrome.runtime.sendMessage({ currentTitles });
+// })();
