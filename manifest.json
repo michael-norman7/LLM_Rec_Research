@@ -12,9 +12,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "assets/ext-icon.png",
-      "48": "assets/ext-icon.png",
-      "128": "assets/ext-icon.png"
+      "16": "assets/ext-logo-16.png",
+      "48": "assets/ext-logo-48.png",
+      "128": "assets/ext-logo-128.png"
     }
   }
 }
