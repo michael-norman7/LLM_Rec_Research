@@ -10,3 +10,5 @@ const loadTitles = () => {
 };
 
 setTimeout(loadTitles, 2000);
+
+// loadTitles()
