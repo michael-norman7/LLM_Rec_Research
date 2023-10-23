@@ -1,56 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const scrapeButton = document.getElementById("scrapeButton");
+  const titleList = document.getElementById("titleList");
+
+  scrapeButton.addEventListener("click", function () {
+    console.log("click");
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      const activeTab = tabs[0];
+      chrome.scripting.executeScript({
+        target: { tabId: activeTab.id },
+        function: () => {
+          chrome.runtime.sendMessage({ action: "scrapeNetflixTitles" });
+        },
+      });
+    });
+  });
+
+  function displayNetflixTitles(titles) {
+    console.log("display");
+    titleList.innerHTML = ""; // Clear the list
+    titles.forEach((title) => {
+      const li = document.createElement("li");
+      li.textContent = title;
+      titleList.appendChild(li);
+    });
+  }
+
   chrome.runtime.onMessage.addListener(function (
     message,
     sender,
     sendResponse
   ) {
-    const text = message.text;
-    const textContainer = document.getElementById("textContainer");
-
-    let newText = document.createElement("strong");
-    newText.style.fontSize = "16px";
-    newText.style.textAlign = "center";
-    newText.textContent = text.length + " Titles found";
-    textContainer.appendChild(newText);
-
-    text.forEach((element) => {
-      newText = document.createElement("p");
-      newText.textContent = element;
-
-      textContainer.appendChild(newText);
-    });
-  });
-
-  function saveSettings(event) {
-    event.preventDefault();
-
-    const option1 = document.getElementById("option1").checked;
-    const option2 = document.getElementById("option2").checked;
-
-    const settings = {
-      option1,
-      option2,
-    };
-
-    chrome.storage.sync.set({ settings });
-  }
-
-  document
-    .getElementById("settingsForm")
-    .addEventListener("submit", saveSettings);
-
-  chrome.storage.sync.get(["settings"], function (result) {
-    const settings = result.settings;
-
-    if (settings) {
-      document.getElementById("option1").checked = settings.option1 || false;
-      document.getElementById("option2").checked = settings.option2 || false;
-      chrome.storage.sync.remove("settings");
-    } 
-    // else {
-    //   let newText = document.createElement("p");
-    //   newText.textContent = "No Settings Found";
-    //   textContainer.appendChild(newText);
-    // }
+    if (message.action === "netflixTitles") {
+      console.log("return");
+      displayNetflixTitles(message.data);
+    }
   });
 });
