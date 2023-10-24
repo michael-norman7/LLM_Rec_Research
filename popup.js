@@ -1,18 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
   const scrapeButton = document.getElementById("scrapeButton");
   const titleList = document.getElementById("titleList");
+  let netflixTitles = [];
 
   scrapeButton.addEventListener("click", function () {
     console.log("click");
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const activeTab = tabs[0];
+
       chrome.scripting.executeScript({
         target: { tabId: activeTab.id },
         function: () => {
-          chrome.runtime.sendMessage({ action: "scrapeNetflixTitles" });
+          const elements = [
+            ...document.getElementsByClassName("fallback-text"),
+          ];
+          netflixTitles = elements.map((element) => element.textContent);
+          console.log(netflixTitles);
         },
       });
     });
+
+    displayNetflixTitles(netflixTitles);
   });
 
   function displayNetflixTitles(titles) {
