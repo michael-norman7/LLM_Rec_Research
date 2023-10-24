@@ -8,23 +8,29 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const activeTab = tabs[0];
 
-      chrome.scripting.executeScript({
-        target: { tabId: activeTab.id },
-        function: () => {
-          const elements = [
-            ...document.getElementsByClassName("fallback-text"),
-          ];
-          netflixTitles = elements.map((element) => element.textContent);
-          console.log(netflixTitles);
+      chrome.scripting.executeScript(
+        {
+          target: { tabId: activeTab.id },
+          function: () => {
+            const elements = [
+              ...document.getElementsByClassName("fallback-text"),
+            ];
+            const netflixTitles = elements.map(
+              (element) => element.textContent
+            );
+            return netflixTitles;
+          },
         },
-      });
-    });
+        (result) => {
+          const netflixTitles = result[0].result;
 
-    displayNetflixTitles(netflixTitles);
+          displayNetflixTitles(netflixTitles);
+        }
+      );
+    });
   });
 
   function displayNetflixTitles(titles) {
-    console.log("display");
     titleList.innerHTML = ""; // Clear the list
     titles.forEach((title) => {
       const li = document.createElement("li");
@@ -32,15 +38,4 @@ document.addEventListener("DOMContentLoaded", function () {
       titleList.appendChild(li);
     });
   }
-
-  chrome.runtime.onMessage.addListener(function (
-    message,
-    sender,
-    sendResponse
-  ) {
-    if (message.action === "netflixTitles") {
-      console.log("return");
-      displayNetflixTitles(message.data);
-    }
-  });
 });
