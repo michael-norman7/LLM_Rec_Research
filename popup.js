@@ -1,10 +1,12 @@
+import { getGPTRecommendation } from "./gptUtil.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   const scrapeButton = document.getElementById("scrapeButton");
-  const titleList = document.getElementById("titleList");
+  // const titleList = document.getElementById("titleList");
+  const popupContent = document.getElementById("popupContent");
   let netflixTitles = [];
 
   scrapeButton.addEventListener("click", function () {
-    console.log("click");
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const activeTab = tabs[0];
 
@@ -30,12 +32,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  function displayNetflixTitles(titles) {
-    titleList.innerHTML = ""; // Clear the list
-    titles.forEach((title) => {
-      const li = document.createElement("li");
-      li.textContent = title;
-      titleList.appendChild(li);
-    });
+  async function displayNetflixTitles(titles) {
+    const gptResponse = await getGPTRecommendation(titles);
+
+    popupContent.innerHTML = "";
+    popupContent.textContent = gptResponse;
+
+    // titleList.innerHTML = ""; // Clear the list
+    // titles.forEach((title) => {
+    //   const li = document.createElement("li");
+    //   li.textContent = title;
+    //   titleList.appendChild(li);
+    // });
   }
 });

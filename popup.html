@@ -6,7 +6,6 @@
     <title>Netflix LLM Recommender</title>
 
     <!-- <link href="popup.css" rel="stylesheet" type="text/css" /> -->
-    <script src="popup.js"></script>
 
     <link
       href="bootstrap-5.0.2-dist/css/bootstrap.css"
@@ -14,16 +13,22 @@
       type="text/css"
     />
     <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.js"></script>
+
+    <script src="axios/axios.min.js"></script>
+
+    <script type="module" src="popup.js"></script>
   </head>
 
   <body>
     <div class="container text-center" style="width: 25em">
       <div>
         <button id="scrapeButton" class="btn btn-primary mx-auto my-3">
-          Scrape Netflix Titles
+          Recommend Titles to Watch
         </button>
 
-        <ol id="titleList"></ol>
+        <div id="popupContent"></div>
+
+        <!-- <ol id="titleList"></ol> -->
       </div>
     </div>
   </body>
