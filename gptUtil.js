@@ -13,7 +13,7 @@ const sysPrompt = `
     Give me your top 5 recommended titles from the list for me to watch.
     Do not return any text other than the title names.
     Only return the exact names of the titles as I input them in the format
-    "<title>| <title>| <title>| <title>| <title>"`;
+    "<title>|<title>|<title>|<title>|<title>"`;
 
 // const sysPrompt = `
 //     I will give you a list of movie or TV titles I can choose from on Netflix.
