@@ -33,10 +33,34 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   async function displayNetflixTitles(titles) {
-    const gptResponse = await getGPTRecommendation(titles);
-
+    // start loading
     popupContent.innerHTML = "";
-    popupContent.textContent = gptResponse;
+    popupContent.textContent = "Loading Recommendations...";
+
+    // send request to GPT
+    let gptResponse = await getGPTRecommendation(titles);
+    let recommendations = gptResponse.split(", ");
+    while (recommendations.length != 5) {
+      gptResponse = await getGPTRecommendation(titles);
+      recommendations = gptResponse.split(", ");
+    }
+
+    // end loading
+    popupContent.innerHTML = "";
+    const h3 = document.createElement("h3");
+    h3.textContent = "Here are your Recommendations:";
+    popupContent.appendChild(h3);
+    const hr = document.createElement("hr");
+    popupContent.appendChild(hr);
+
+    const ol = document.createElement("ol");
+    popupContent.appendChild(ol);
+    recommendations.forEach((title) => {
+      const li = document.createElement("li");
+      li.textContent = title;
+      ol.appendChild(li);
+    });
+    // popupContent.textContent = gptResponse;
 
     // titleList.innerHTML = ""; // Clear the list
     // titles.forEach((title) => {
