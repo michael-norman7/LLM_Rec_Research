@@ -1,12 +1,16 @@
+import { openAIKey } from "./keys.js";
+
 const CHATGPT_END_POINT = "https://api.openai.com/v1/chat/completions";
 const CHATGPT_MODEL = "gpt-3.5-turbo";
 
-const openAIKey = fetch("keys.json").then((response) => {
-  if (!response.ok) {
-    throw new Error("No response from keys.json");
-  }
-  return response.json()["openAIKey"];
-});
+// const openAIKey = fetch(chrome.runtime.getURL("keys.json")).then((response) => {
+//   if (!response.ok) {
+//     throw new Error("No response from keys.json");
+//   }
+//   return response.json()["openAIKey"];
+// });
+
+// const openAIKey = "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";
 
 // const sysPrompt = `
 //     You are a movie recommender system that will do it's best to recommend movies to the user
