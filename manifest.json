@@ -1,6 +1,6 @@
 {
   "name": "Netflix LLM Recommendations",
-  "description": "DESCRIPTION",
+  "description": "A browser extension that leverages GPT-3.5-turbo to provide more personalized Netflix title recommendations.",
   "version": "1.0",
   "manifest_version": 3,
   "permissions": ["storage", "tabs", "webNavigation", "activeTab", "scripting"],
