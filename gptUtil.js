@@ -1,4 +1,7 @@
-import { openAIKey } from "./keys.js";
+import keys from "./keys.mjs";
+const { openAIKey, movieDBKey } = keys;
+
+import getTitleInfo from "./movieAPI.js";
 
 const CHATGPT_END_POINT = "https://api.openai.com/v1/chat/completions";
 const CHATGPT_MODEL = "gpt-3.5-turbo";
@@ -11,7 +14,7 @@ const CHATGPT_MODEL = "gpt-3.5-turbo";
 
 const sysPrompt = `
     I will give you a list of movie or TV titles I can choose from on Netflix.
-    Give me your top 5 recommended titles from the list for me to watch.
+    Give me only your top 5 recommended titles from the list for me to watch.
     Do not return any text other than the title names.
     Only return the exact names of the titles as I input them in the format
     "<title>|<title>|<title>|<title>|<title>"`;
@@ -31,9 +34,17 @@ const sysPrompt = `
 
 export const getGPTRecommendation = async (titles) => {
   let titleOptions = "Here are the titles I can choose from: \n";
-  titles.forEach((title) => {
-    titleOptions += title + ", ";
-  });
+
+  // Just titles
+  // titles.forEach((title) => {
+  //   titleOptions += title + ", ";
+  // });
+
+  // With title info
+  for (const title of titles) {
+    let titleInfo = await getTitleInfo(title);
+    titleOptions += `${title} (genres: ${titleInfo.genres}), `;
+  }
 
   console.log(titleOptions);
 

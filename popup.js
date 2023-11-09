@@ -40,16 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // send request to GPT
     let gptResponse = await getGPTRecommendation(titles);
     let recommendations = gptResponse.split("|");
-    let cnt = 0;
-    while (recommendations.length != 5) {
-      cnt++;
-      gptResponse = await getGPTRecommendation(titles);
-      recommendations = gptResponse.split("|");
-      if (cnt == 5) {
-        console.error("Incorrent format of output from GPT.");
-        return;
-      }
-    }
+    // let cnt = 0;
+    // while (recommendations.length != 5) {
+    //   cnt++;
+    //   gptResponse = await getGPTRecommendation(titles);
+    //   recommendations = gptResponse.split("|");
+    //   if (cnt == 5) {
+    //     console.error("Incorrent format of output from GPT.");
+    //     return;
+    //   }
+    // }
 
     // end loading
     popupContent.innerHTML = "";

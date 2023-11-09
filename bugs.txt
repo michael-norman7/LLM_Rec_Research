@@ -1,0 +1,2 @@
+Issue with Movie API querying "Shameless (U.S.) no response
+    -possibly remove (U.S.) from all queries
