@@ -19,8 +19,14 @@ function getCurrentDateTime() {
   return currentDateTimeString;
 }
 
+function openFeedbackForm() {
+  let link = "https://forms.gle/QBTEubgoZp5v4V5z5";
+  window.open(link, "_blank");
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   const scrapeButton = document.getElementById("scrapeButton");
+  const feedbackButton = document.getElementById("feedbackButton");
   const popupContent = document.getElementById("popupContent");
   const buttonContainer = document.getElementById("buttonContainer");
 
@@ -61,9 +67,9 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.storage.local.get("recommendation_dt", function (result) {
       const dt_string = result.recommendation_dt || "";
       if (dt_string != "") {
-        console.log(dt_string);
+        // const dt = document.getElementById("generationDate");
         const dt = document.createElement("div");
-        dt.style = "text-align: right; font-size: 12px;";
+        dt.style = "text-align: right; font-size: 13px";
         dt.textContent = "Generated " + dt_string;
         popupContent.appendChild(dt);
       }
@@ -97,6 +103,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
     });
+  });
+
+  feedbackButton.addEventListener("click", function () {
+    var link = "https://forms.gle/QBTEubgoZp5v4V5z5";
+    chrome.tabs.create({ url: link });
   });
 
   async function displayNetflixTitles(titles) {
