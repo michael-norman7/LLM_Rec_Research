@@ -90,7 +90,7 @@ const getTitleInfo = async (title) => {
   }
 
   let currInfo = titleInfoRes[0];
-//   console.log(currInfo);
+  //   console.log(currInfo);
 
   let titleInfo = {};
   try {
@@ -125,5 +125,4 @@ const getTitleInfo = async (title) => {
   return titleInfo;
 };
 
-// console.log(await getTitleInfo("Stranger Things"));
 export default getTitleInfo;
