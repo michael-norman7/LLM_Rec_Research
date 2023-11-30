@@ -24,8 +24,14 @@
     <script type="module" src="popup.js"></script>
   </head>
 
-  <body style="font-family: 'Roboto', sans-serif">
-    <div class="container text-center" style="width: 21em">
+  <body
+    style="
+      font-family: 'Roboto', sans-serif;
+      background-color: #141414;
+      color: white;
+    "
+  >
+    <div class="container text-center" style="width: 35em">
       <div>
         <div id="buttonContainer">
           <button id="scrapeButton" class="btn btn-primary mx-auto my-3">
@@ -36,11 +42,7 @@
         <div id="popupContent"></div>
 
         <div id="infoContainer">
-          <button
-            id="feedbackButton"
-            class="btn btn-primary my-3"
-            onclick="openFeedbackForm()"
-          >
+          <button id="feedbackButton" class="btn btn-primary my-3">
             Give Feedback
           </button>
         </div>

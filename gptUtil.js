@@ -14,23 +14,19 @@ const CHATGPT_MODEL = "gpt-3.5-turbo";
 
 const sysPrompt = `
     I will give you a list of movie or TV titles I can choose from on Netflix.
-    Give me only your top 5 recommended titles from the list for me to watch.
+    Give me only your top 10 recommended titles from the list for me to watch in 
+    the order of the best recommendations for me.
     Do not return any text other than the title names.
     Only return the exact names of the titles as I input them in the format
-    "<title>|<title>|<title>|<title>|<title>"`;
+    "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
 
 // const sysPrompt = `
 //     I will give you a list of movie or TV titles I can choose from on Netflix.
 //     These titles were recommended to me by Netflix based on my past watch history and interests.
-//     From these titles summarize my preferences briefly and recommend me 5 titles to watch.
+//     From these titles summarize my preferences briefly and recommend me 10 titles to watch.
 //     Do not explain your recommendations.
-//     (Format: <- preferences ->
-//     <- newline ->
-//     1. <-title->
-//     2. <-title->
-//     3. <-title->
-//     4. <-title->
-//     5. <-title->)`;
+//     Only return the exact names of the titles as I input them in the format
+//     "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
 
 export const getGPTRecommendation = async (titles) => {
   let titleOptions = "Here are the titles I can choose from: \n";
