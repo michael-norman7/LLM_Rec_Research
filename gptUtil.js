@@ -32,15 +32,15 @@ export const getGPTRecommendation = async (titles) => {
   let titleOptions = "Here are the titles I can choose from: \n";
 
   // Just titles
-  // titles.forEach((title) => {
-  //   titleOptions += title + ", ";
-  // });
+  titles.forEach((title) => {
+    titleOptions += title + ", ";
+  });
 
   // With title info
-  for (const title of titles) {
-    let titleInfo = await getTitleInfo(title);
-    titleOptions += `${title} (genres: ${titleInfo.genres}), `;
-  }
+  // for (const title of titles) {
+  //   let titleInfo = await getTitleInfo(title);
+  //   titleOptions += `${title} (genres: ${titleInfo.genres}), `;
+  // }
 
   console.log(titleOptions);
 
