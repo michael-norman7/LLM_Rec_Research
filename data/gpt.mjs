@@ -1,51 +1,34 @@
-// using openai api directly
+import keys from "../keys.mjs";
+const { openAIKey, movieDBKey } = keys;
 
-// import OpenAI from "openai";
+const CHATGPT_END_POINT = "https://api.openai.com/v1/chat/completions";
+const CHATGPT_MODEL = "gpt-3.5-turbo";
 
-// const openai = new OpenAI({
-//   apiKey: "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",
-// });
+const sysPrompt = `
+    I will give you a list of movie or TV titles I can choose from on Netflix.
+    These titles were recommended to me by Netflix based on my past watch history and interests.
+    From these titles think of how you would summarize my preferences and recommend me 10 titles 
+    to watch based on those preferences. Do not explain your recommendations.
+    Only return the exact names of the titles as I input them in the format
+    "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
 
-// const response = await openai.chat.completions.create({
-//   model: "gpt-3.5-turbo",
-//   messages: [
-//     // {
-//     //   role: "system",
-//     //   content:
-//     //     "You will be provided with a piece of code, and your task is to explain it in a concise way.",
-//     // },
-//     {
-//       role: "user",
-//       content: "Hello, what is your name?",
-//     },
-//   ]
-// });
+let titleOptions = "Here are the titles I can choose from: \n";
 
-const openAIKey = "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";
-const config = {
-  headers: {
-    Authorization: `Bearer ${openAIKey}`,
-  },
-};
 
-const message = "Hello, what is your name?";
+let titles = ["One Piece", "Better Call Saul", "Arrow", "The Good Place"]
 
+titles.forEach((title) => {
+  titleOptions += title + ", ";
+});
+
+console.log(titleOptions);
+
+const sysMessage = { role: "system", content: sysPrompt };
+const userMessage = { role: "user", content: titleOptions };
 const chatGPTData = {
-  model: "gpt-3.5-turbo",
-  messages: [{ role: "user", content: message }],
+  model: CHATGPT_MODEL,
+  messages: [sysMessage, userMessage],
 };
-
-// using axios
-
-// import axios from "axios";
-// const response = await axios.post(
-//   "https://api.openai.com/v1/chat/completions",
-//   chatGPTData,
-//   config
-// );
-
-// using fetch
-
 const requestOptions = {
   method: "POST",
   headers: {
@@ -56,19 +39,18 @@ const requestOptions = {
 };
 
 try {
-  const response = await fetch(
-    "https://api.openai.com/v1/chat/completions",
-    requestOptions
-  );
+  const response = await fetch(CHATGPT_END_POINT, requestOptions);
   if (!response.ok) {
     throw new Error("Request failed with status " + response.status);
   }
 
   const responseData = await response.json();
   const message = responseData.choices[0].message.content;
+  console.log("Raw message:")
+  console.log(responseData.choices);
+  console.log();
   console.log(message);
+
 } catch (error) {
   console.error("Error:", error);
 }
-
-// console.log(response?.data?.choices[0]?.message?.content);

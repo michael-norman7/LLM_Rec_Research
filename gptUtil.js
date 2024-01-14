@@ -6,27 +6,31 @@ import getTitleInfo from "./movieAPI.js";
 const CHATGPT_END_POINT = "https://api.openai.com/v1/chat/completions";
 const CHATGPT_MODEL = "gpt-3.5-turbo";
 
+// simple recommendation
 // const sysPrompt = `
-//     You are a movie recommender system that will do it's best to recommend movies to the user
-//     based off preferences they give you. You will work in a multi-step process to collect user
-//     preferences, determine a user profile including what types of movies you think the user likes,
-//     and finally recommend movies to the user to watch.`;
+//     You are a movie recommender system.
+//     I will give you a list of movie or TV titles I can choose from on Netflix.
+//     Give me only your top 10 recommended titles from the list for me to watch in 
+//     the order of the best recommendations for me.
 
+//     Do not return any text other than the title names.
+//     Only return the exact names of the titles as I input them in the format
+//     "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
+
+// preferences recommendation
 const sysPrompt = `
     I will give you a list of movie or TV titles I can choose from on Netflix.
-    Give me only your top 10 recommended titles from the list for me to watch in 
-    the order of the best recommendations for me.
-    Do not return any text other than the title names.
+    These titles were recommended to me by Netflix based on my past watch history and interests.
+    From these titles think of how you would summarize my preferences and recommend me 10 titles 
+    to watch based on those preferences. Do not explain your recommendations.
     Only return the exact names of the titles as I input them in the format
     "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
 
+// Add prompt to take preferences, then recommend titles, then recommend titles from the 
+// candidate set that are similar to recommendations
 // const sysPrompt = `
-//     I will give you a list of movie or TV titles I can choose from on Netflix.
-//     These titles were recommended to me by Netflix based on my past watch history and interests.
-//     From these titles summarize my preferences briefly and recommend me 10 titles to watch.
-//     Do not explain your recommendations.
-//     Only return the exact names of the titles as I input them in the format
-//     "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`;
+//     I will give you a list of movie or TV titles I can choose from on Netflix.`;
+
 
 export const getGPTRecommendation = async (titles) => {
   let titleOptions = "Here are the titles I can choose from: \n";
