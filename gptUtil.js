@@ -19,7 +19,7 @@ const CHATGPT_MODEL = "gpt-3.5-turbo";
 
 // preferences recommendation
 const sysPrompt = `
-    I will give you a list of movie or TV titles I can choose from on Netflix.
+    I will give you a list of movies or TV titles I can choose from on Netflix.
     These titles were recommended to me by Netflix based on my past watch history and interests.
     From these titles think of how you would summarize my preferences and recommend me 10 titles 
     to watch based on those preferences. Do not explain your recommendations.
