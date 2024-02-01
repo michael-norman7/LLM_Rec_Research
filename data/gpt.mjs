@@ -96,11 +96,11 @@ const message1 = {
 };
 const message2 = {
   role: "user",
-  content: `Based on my preferences, recommend me 10 titles to watch.`,
+  content: `Based on my preferences, recommend me 4 titles to watch.`,
 };
 const message3 = {
   role: "user",
-  content: `Recommend me 10 titles from the candidate set that are similar to the 10 titles you 
+  content: `Recommend me 4 titles from the candidate set that are similar to the 4 titles you 
   just recommended. Order these titles in descending order with the most releveant title first. 
   Do not explain your recommendations. Only return the exact names of the titles as I input them 
   in the format "<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>|<title>"`,
@@ -128,9 +128,9 @@ try {
 
   const responseData = await response.json();
   const message = responseData.choices[0].message.content;
-  console.log("Raw message:");
-  console.log(responseData.choices);
-  console.log();
+  // console.log("Raw message:");
+  // console.log(responseData.choices);
+  // console.log();
   console.log(message);
 } catch (error) {
   console.error("Error:", error);

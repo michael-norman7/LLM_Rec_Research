@@ -45,10 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chrome.storage.local.get("titles", function (result) {
           const titleDetails = result.titles || {};
 
-          // Display feedback button in top left corner
-          // display refresh button in top right corner
-          // display recommendations in center and under buttons
-          // display generation date in bottom right corner
           feedbackButton.style = "display: block";
           scrapeButton.className = "btn btn-secondary my-3 me-1";
           scrapeButton.textContent = "Refresh Recommendations";
@@ -69,10 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
           // Display refresh button
 
           // Display recommendations
-          // Use the stored title images, titles, and links to display recommendations
-          // Make the images clickable and link to the watch link
-          // Make the images into 2 columns and only show the first 4 recommendations
-          // that have stored title details data
           popupContent.innerHTML = "";
 
           const header = document.createElement("p");
@@ -99,10 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 "display: flex; flex-direction: column; align-items: center; margin: 10px; width: 200px;";
               recommendationContainer.appendChild(recommendation);
 
-              // Display the image in a 16x9 image format
-              // make the image clickable and link to the watch link
-              // change pointer to hand when hovering over image
-              // add a play button over the image on hover
               const titleImage = document.createElement("img");
               titleImage.src = titleDetails[title]["img_link"];
               titleImage.style = "max-width: 15em; max-height: 8.5em;";
@@ -244,7 +232,8 @@ document.addEventListener("DOMContentLoaded", function () {
       popupContent.appendChild(pad);
 
       // send request to GPT
-      let gptResponse = await getGPTRecommendation(titles);
+      let promptType = "rec_similar_prefs";
+      let gptResponse = await getGPTRecommendation(titles, promptType);
       let recommendations = gptResponse.split("|");
       const currentDate = getCurrentDateTime();
 
