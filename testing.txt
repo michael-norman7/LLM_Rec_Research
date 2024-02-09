@@ -1,0 +1,35 @@
+Tests:
+
+# of good recs in chrome ext out of 4
+    *group/individual
+    refresh ext and record # of accurate recommendations out of 4
+
+    + fast test to compare prompt methods
+
+
+chrome ext vs Netflix recs
+    *group
+    pull first 4 of top row on netflix to compare against ext
+    record only which set was preferred
+    
+    + can gauge diff btw ext and basic Netflix recs
+    - can only run once per user
+
+
+title test set run many times in loop get %
+
+bias on where recs are on page (low/high)
+
+survey user netflix rec satisfaction
+
+include api vs not
+
+avg date of Netflix vs ext
+
+gpt 3.5 vs 4
+    *individual
+    can compare best performing prompt with 3.5 and 4
+
+    + 3.5 frequent issues conforming to formatting
+    + 4 better understanding of patterns and preferences
+    - not sure how relevant to project
