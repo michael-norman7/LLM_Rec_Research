@@ -64,21 +64,6 @@ function getMessages(titleOptions, prompt = "simple") {
       messages = [
         {
           role: "system",
-          content: `I will give you a list of movies or TV titles I can choose from on Netflix.
-          These titles were recommended to me by Netflix based on my past watch history and interests.
-          From these titles think of how you would summarize my preferences and recommend me 4 titles 
-          to watch based on those preferences. Do not explain your recommendations.
-          Only return the exact names of the titles as I input them in the format
-          "<title>|<title>|<title>|<title>"`,
-        },
-        { role: "user", content: titleOptions },
-      ];
-      break;
-
-    case "prefs":
-      messages = [
-        {
-          role: "system",
           content:
             `This is a list of the movies or TV titles I can choose to watch on Netflix. ` +
             titleOptions,
@@ -90,12 +75,12 @@ function getMessages(titleOptions, prompt = "simple") {
         },
         {
           role: "user",
-          content: `Now, recommend me 4 titles 
-        to watch based on those preferences. Do not explain your recommendations.
-        Only return the exact names of the titles as I input them in the format
-        "<title>|<title>|<title>|<title>"`,
+          content: `Now, recommend me 4 titles to watch based on those preferences.
+
+          You will be penalized if you return any text other than the title names.
+          Only return the exact names of the titles as I input them in the format
+          "<title>|<title>|<title>|<title>"`,
         },
-        { role: "user", content: titleOptions },
       ];
       break;
 
@@ -118,9 +103,12 @@ function getMessages(titleOptions, prompt = "simple") {
         },
         {
           role: "user",
-          content: `Now, recommend me 4 titles from the candidate set that are similar to the 4 titles you just 
-          recommended. Do not explain your recommendations. You will be penalized unless you only 
-          return the exact names of the titles as I input them in the format "<title>|<title>|<title>|<title>"`,
+          content: `Now, recommend me 4 titles from the candidate set that are similar 
+          to the 4 titles you just recommended.
+
+          You will be penalized if you return any text other than the title names.
+          Only return the exact names of the titles as I input them in the format
+          "<title>|<title>|<title>|<title>"`,
         },
       ];
       break;
@@ -132,7 +120,7 @@ function getMessages(titleOptions, prompt = "simple") {
           role: "system",
           content: `You are a movie recommender system.
           I will give you a list of movie or TV titles I can choose from on Netflix.
-          Give me only your top 4 recommended titles from the list for me to watch.
+          Recommend me only 4 titles from this list for me to watch.
 
           You will be penalized if you return any text other than the title names.
           Only return the exact names of the titles as I input them in the format
