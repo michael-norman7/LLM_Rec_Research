@@ -33,26 +33,88 @@
   >
     <div class="container text-center" style="width: 35em">
       <div>
-        <div id="buttonContainer" class="row py-3">
-          <div class="col-2">
-            <!-- <button id="testingButton" class="btn btn-primary">Testing</button> -->
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-secondary">Left</button>
-              <button type="button" class="btn btn-secondary">Middle</button>
-              <button type="button" class="btn btn-secondary">Right</button>
+        <!-- Top row -->
+        <div
+          id="buttonContainer"
+          class="d-flex gap-3 py-3 justify-content-around"
+        >
+          <!-- Prompt option group -->
+          <div class="d-flex align-items-center gap-2">
+            <div>Prompts</div>
+            <div class="btn-group">
+              <button
+                id="promptButton1"
+                type="button"
+                class="btn text-light"
+                style="background-color: #e50914"
+              >
+                1
+              </button>
+              <button
+                id="promptButton2"
+                type="button"
+                class="btn text-light"
+                style="background-color: grey"
+              >
+                2
+              </button>
             </div>
           </div>
-          <div class="col-10">
+
+          <!-- GPT option group -->
+          <div class="d-flex align-items-center gap-2">
+            <div>GPT</div>
+            <div class="btn-group">
+              <button
+                id="gptButton1"
+                type="button"
+                class="btn text-light"
+                style="background-color: #e50914"
+              >
+                3.5
+              </button>
+              <button
+                id="gptButton2"
+                type="button"
+                class="btn text-light"
+                style="background-color: grey"
+              >
+                4
+              </button>
+            </div>
+          </div>
+
+          <!-- API option group -->
+          <div class="d-flex align-items-center gap-2">
+            <div>API</div>
+            <div class="btn-group">
+              <button
+                id="apiButton1"
+                type="button"
+                class="btn text-light"
+                style="background-color: #e50914"
+              >
+                Y
+              </button>
+              <button
+                id="apiButton2"
+                type="button"
+                class="btn text-light"
+                style="background-color: grey"
+              >
+                N
+              </button>
+            </div>
+          </div>
+
+          <div class="ml-auto">
             <button id="scrapeButton" class="btn btn-primary">
               Recommend Titles to Watch
             </button>
           </div>
         </div>
 
-        <div id="popupContent" style="margin: 0">
-          <div id="testingContent" style="margin: 0"></div>
-          <div id="recContent"></div>
-        </div>
+        <div id="popupContent"></div>
 
         <div id="infoContainer">
           <button id="feedbackButton" class="btn btn-primary my-3">

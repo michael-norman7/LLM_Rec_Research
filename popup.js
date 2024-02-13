@@ -22,11 +22,8 @@ function getCurrentDateTime() {
 
 document.addEventListener("DOMContentLoaded", function () {
   const scrapeButton = document.getElementById("scrapeButton");
-  const testingButton = document.getElementById("testingButton");
   const feedbackButton = document.getElementById("feedbackButton");
-  // const popupContent = document.getElementById("popupContent");
-  const popupContent = document.getElementById("recContent");
-  const testingContent = document.getElementById("testingContent");
+  const popupContent = document.getElementById("popupContent");
   const buttonContainer = document.getElementById("buttonContainer");
 
   const getNetflixTop4 = () => {
@@ -84,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           buttonContainer.style.textAlign = "right";
 
-          scrapeButton.textContent = "Refresh Recommendations";
+          scrapeButton.textContent = "Refresh";
           scrapeButton.className = "btn btn-primary";
 
           popupContent.style.fontSize = "16px";
@@ -103,8 +100,8 @@ document.addEventListener("DOMContentLoaded", function () {
           feedbackButton.style.borderColor = "#6c757d";
 
           // make the testing button color grey
-          testingButton.style.backgroundColor = "#6c757d";
-          testingButton.style.borderColor = "#6c757d";
+          // testingButton.style.backgroundColor = "#6c757d";
+          // testingButton.style.borderColor = "#6c757d";
 
           // header text
           const header = document.createElement("p");
@@ -116,89 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
           const hr = document.createElement("hr");
           hr.style.borderTop = "2px solid white";
           popupContent.appendChild(hr);
-
-          // Display Netflix Top 4 Recommendations
-          chrome.storage.local.get("testing", function (result) {
-            if (result.testing) {
-              chrome.storage.local.get("netflixTop4", function (result) {
-                const top4 = result.netflixTop4 || [];
-
-                if (top4 == []) {
-                  console.error("Error retrieving top 4 Netflix Titles.");
-                } else {
-                  console.log("TOP4");
-                  console.log(top4);
-
-                  // Netflix top 4 recommendation box
-                  const testingContainer = document.createElement("div");
-                  testingContainer.id = "recommendationContainer";
-                  testingContainer.style.display = "flex";
-                  testingContainer.style.flexWrap = "wrap";
-                  testingContainer.style.justifyContent = "space-evenly";
-                  testingContainer.style.alignItems = "center";
-                  testingContent.appendChild(testingContainer);
-
-                  for (let i = 0; i < top4.length; ++i) {
-                    const title = top4[i];
-                    if (title in titleDetails) {
-                      const recommendation = document.createElement("div");
-                      recommendation.style.display = "flex";
-                      recommendation.style.flexDirection = "column";
-                      recommendation.style.alignItems = "center";
-                      recommendation.style.margin = "10px";
-                      recommendation.style.width = "200px";
-
-                      testingContainer.appendChild(recommendation);
-
-                      const titleImage = document.createElement("img");
-                      titleImage.src = titleDetails[title]["img_link"];
-                      titleImage.style.maxWidth = "15em";
-                      titleImage.style.maxHeight = "8.5em";
-                      titleImage.style.cursor = "pointer";
-
-                      titleImage.addEventListener("click", function () {
-                        chrome.tabs.create({
-                          url: titleDetails[title]["watch_link"],
-                        });
-                      });
-                      titleImage.addEventListener("mouseover", function () {
-                        titleImage.style.opacity = "0.5";
-                      });
-                      titleImage.addEventListener("mouseout", function () {
-                        titleImage.style.opacity = "1";
-                      });
-
-                      const playButton = document.createElement("img");
-                      playButton.src = chrome.runtime.getURL(
-                        "assets/art/play2.avif"
-                      );
-                      playButton.style.position = "absolute";
-                      playButton.style.top = "50%";
-                      playButton.style.left = "50%";
-                      playButton.style.transform = "translate(-50%, -50%)";
-                      playButton.style.opacity = "0";
-                      playButton.style.transition = "opacity 0.3s ease-in-out";
-
-                      playButton.addEventListener("click", function () {
-                        chrome.tabs.create({
-                          url: titleDetails[title]["watch_link"],
-                        });
-                      });
-
-                      titleImage.addEventListener("mouseover", function () {
-                        playButton.style.opacity = "1";
-                      });
-                      titleImage.addEventListener("mouseout", function () {
-                        playButton.style.opacity = "0";
-                      });
-
-                      recommendation.appendChild(titleImage);
-                    }
-                  }
-                }
-              });
-            }
-          });
 
           // title recommendation box
           const recommendationContainer = document.createElement("div");
@@ -336,19 +250,19 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.tabs.create({ url: link });
   });
 
-  testingButton.addEventListener("click", function () {
-    chrome.storage.local.get("testing", function (result) {
-      if (result.testing) {
-        chrome.storage.local.set({ testing: false });
-        console.log("Testing Mode Disabled");
-      } else {
-        chrome.storage.local.set({ testing: true });
-        console.log("Testing Mode Enabled");
-      }
-    });
+  // testingButton.addEventListener("click", function () {
+  //   chrome.storage.local.get("testing", function (result) {
+  //     if (result.testing) {
+  //       chrome.storage.local.set({ testing: false });
+  //       console.log("Testing Mode Disabled");
+  //     } else {
+  //       chrome.storage.local.set({ testing: true });
+  //       console.log("Testing Mode Enabled");
+  //     }
+  //   });
 
-    loadRecommendations();
-  });
+  //   loadRecommendations();
+  // });
 
   async function displayTitles() {
     // get titles from local storage
