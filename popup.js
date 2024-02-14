@@ -21,11 +21,21 @@ function getCurrentDateTime() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const scrapeButton = document.getElementById("scrapeButton");
-  const feedbackButton = document.getElementById("feedbackButton");
   const popupContent = document.getElementById("popupContent");
-  const buttonContainer = document.getElementById("buttonContainer");
 
+  const buttonContainer = document.getElementById("buttonContainer");
+  const scrapeButton = document.getElementById("scrapeButton");
+
+  const promptButton1 = document.getElementById("promptButton1");
+  const promptButton2 = document.getElementById("promptButton2");
+  const gptButton1 = document.getElementById("gptButton1");
+  const gptButton2 = document.getElementById("gptButton2");
+  const apiButton1 = document.getElementById("apiButton1");
+  const apiButton2 = document.getElementById("apiButton2");
+
+  const feedbackButton = document.getElementById("feedbackButton");
+
+  /*
   const getNetflixTop4 = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const activeTab = tabs[0];
@@ -58,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   console.log("top4:");
   console.log(top4);
+  */
 
   const loadRecommendations = async () => {
     // display recommendations
@@ -91,6 +102,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
           feedbackButton.style = "margin: 0px";
 
+          // Init promptType button colors
+          chrome.storage.local.get("promptType", function (result) {
+            const promptType = result.promptType || "";
+            if (promptType == "simple") {
+              promptButton1.style =
+                "background-color: #E50914; border-color: #E50914";
+              promptButton2.style =
+                "background-color: #6c757d; border-color: #6c757d";
+            } else if (promptType == "prefs") {
+              promptButton1.style =
+                "background-color: #6c757d; border-color: #6c757d";
+              promptButton2.style =
+                "background-color: #E50914; border-color: #E50914";
+            }
+          });
+
+          // Init gptVersion button colors
+          chrome.storage.local.get("gptVersion", function (result) {
+            const gptVersion = result.gptVersion || "";
+            if (gptVersion == "gpt3") {
+              gptButton1.style =
+                "background-color: #E50914; border-color: #E50914";
+              gptButton2.style =
+                "background-color: #6c757d; border-color: #6c757d";
+            } else if (gptVersion == "gpt4") {
+              gptButton1.style =
+                "background-color: #6c757d; border-color: #6c757d";
+              gptButton2.style =
+                "background-color: #E50914; border-color: #E50914";
+            }
+          });
+
+          // Init api button colors
+          chrome.storage.local.get("api", function (result) {
+            const api = result.api || "";
+            if (api == true) {
+              apiButton1.style =
+                "background-color: #E50914; border-color: #E50914";
+              apiButton2.style =
+                "background-color: #6c757d; border-color: #6c757d";
+            } else if (api == false) {
+              apiButton1.style =
+                "background-color: #6c757d; border-color: #6c757d";
+              apiButton2.style =
+                "background-color: #E50914; border-color: #E50914";
+            }
+          });
+
           // make the scrape button color #E50914 (Netflix red)
           scrapeButton.style.backgroundColor = "#E50914";
           scrapeButton.style.borderColor = "#E50914";
@@ -98,10 +157,6 @@ document.addEventListener("DOMContentLoaded", function () {
           // make the feedback button color grey
           feedbackButton.style.backgroundColor = "#6c757d";
           feedbackButton.style.borderColor = "#6c757d";
-
-          // make the testing button color grey
-          // testingButton.style.backgroundColor = "#6c757d";
-          // testingButton.style.borderColor = "#6c757d";
 
           // header text
           const header = document.createElement("p");
@@ -250,19 +305,90 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.tabs.create({ url: link });
   });
 
-  // testingButton.addEventListener("click", function () {
-  //   chrome.storage.local.get("testing", function (result) {
-  //     if (result.testing) {
-  //       chrome.storage.local.set({ testing: false });
-  //       console.log("Testing Mode Disabled");
-  //     } else {
-  //       chrome.storage.local.set({ testing: true });
-  //       console.log("Testing Mode Enabled");
-  //     }
-  //   });
+  // Prompt Type Buttons
+  promptButton1.addEventListener("click", function () {
+    console.log("promptButton1 clicked");
+    chrome.storage.local.get("promptType", function (result) {
+      const promptType = result.promptType || "";
+      if (promptType != "simple") {
+        chrome.storage.local.set({ promptType: "simple" });
 
-  //   loadRecommendations();
-  // });
+        promptButton1.style =
+          "background-color: #E50914; border-color: #E50914";
+        promptButton2.style =
+          "background-color: #6c757d; border-color: #6c757d";
+      }
+    });
+  });
+
+  promptButton2.addEventListener("click", function () {
+    console.log("promptButton2 clicked");
+    chrome.storage.local.get("promptType", function (result) {
+      const promptType = result.promptType || "";
+      if (promptType != "prefs") {
+        chrome.storage.local.set({ promptType: "prefs" });
+
+        promptButton1.style =
+          "background-color: #6c757d; border-color: #6c757d";
+        promptButton2.style =
+          "background-color: #E50914; border-color: #E50914";
+      }
+    });
+  });
+
+  // GPT Version Buttons
+  gptButton1.addEventListener("click", function () {
+    console.log("gptButton1 clicked");
+    chrome.storage.local.get("gptVersion", function (result) {
+      const gptVersion = result.gptVersion || "";
+      if (gptVersion != "gpt3") {
+        chrome.storage.local.set({ gptVersion: "gpt3" });
+
+        gptButton1.style = "background-color: #E50914; border-color: #E50914";
+        gptButton2.style = "background-color: #6c757d; border-color: #6c757d";
+      }
+    });
+  });
+
+  gptButton2.addEventListener("click", function () {
+    console.log("gptButton2 clicked");
+    chrome.storage.local.get("gptVersion", function (result) {
+      const gptVersion = result.gptVersion || "";
+      if (gptVersion != "gpt4") {
+        chrome.storage.local.set({ gptVersion: "gpt4" });
+
+        gptButton1.style = "background-color: #6c757d; border-color: #6c757d";
+        gptButton2.style = "background-color: #E50914; border-color: #E50914";
+      }
+    });
+  });
+
+  // API Buttons
+  apiButton1.addEventListener("click", function () {
+    console.log("apiButton1 clicked");
+    chrome.storage.local.get("api", function (result) {
+      const api = result.api || "";
+      if (api != true) {
+        chrome.storage.local.set({ api: true });
+
+        apiButton1.style = "background-color: #E50914; border-color: #E50914";
+        apiButton2.style = "background-color: #6c757d; border-color: #6c757d";
+      }
+    });
+  });
+
+  apiButton2.addEventListener("click", function () {
+    console.log("apiButton2 clicked");
+    chrome.storage.local.get("api", function (result) {
+      const api = result.api || "";
+      if (api != false) {
+        chrome.storage.local.set({ api: false });
+
+        apiButton1.style = "background-color: #6c757d; border-color: #6c757d";
+        apiButton2.style = "background-color: #E50914; border-color: #E50914";
+      }
+    });
+  });
 
   async function displayTitles() {
     // get titles from local storage
