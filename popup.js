@@ -122,27 +122,23 @@ document.addEventListener("DOMContentLoaded", function () {
           chrome.storage.local.get("gptVersion", function (result) {
             const gptVersion = result.gptVersion || "";
             if (gptVersion == "gpt3") {
-              gptButton1.style =
-                "background-color: #E50914; border-color: #E50914";
-              gptButton2.style =
-                "background-color: #6c757d; border-color: #6c757d";
+              gptButton1.style = "background-color: #E50914; border-color: #E50914";
+              gptButton2.style = "background-color: #6c757d; border-color: #6c757d";
             } else if (gptVersion == "gpt4") {
-              gptButton1.style =
-                "background-color: #6c757d; border-color: #6c757d";
-              gptButton2.style =
-                "background-color: #E50914; border-color: #E50914";
+              gptButton1.style = "background-color: #6c757d; border-color: #6c757d";
+              gptButton2.style = "background-color: #E50914; border-color: #E50914";
             }
           });
 
           // Init api button colors
           chrome.storage.local.get("api", function (result) {
             const api = result.api || "";
-            if (api == true) {
+            if (api == "true") {
               apiButton1.style =
                 "background-color: #E50914; border-color: #E50914";
               apiButton2.style =
                 "background-color: #6c757d; border-color: #6c757d";
-            } else if (api == false) {
+            } else if (api == "false") {
               apiButton1.style =
                 "background-color: #6c757d; border-color: #6c757d";
               apiButton2.style =
@@ -307,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Prompt Type Buttons
   promptButton1.addEventListener("click", function () {
-    console.log("promptButton1 clicked");
+    console.log("promptType set to simple");
     chrome.storage.local.get("promptType", function (result) {
       const promptType = result.promptType || "";
       if (promptType != "simple") {
@@ -322,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   promptButton2.addEventListener("click", function () {
-    console.log("promptButton2 clicked");
+    console.log("promptType set to prefs");
     chrome.storage.local.get("promptType", function (result) {
       const promptType = result.promptType || "";
       if (promptType != "prefs") {
@@ -338,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // GPT Version Buttons
   gptButton1.addEventListener("click", function () {
-    console.log("gptButton1 clicked");
+    console.log("gptVersion set to gpt3");
     chrome.storage.local.get("gptVersion", function (result) {
       const gptVersion = result.gptVersion || "";
       if (gptVersion != "gpt3") {
@@ -351,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   gptButton2.addEventListener("click", function () {
-    console.log("gptButton2 clicked");
+    console.log("gptVersion set to gpt4");
     chrome.storage.local.get("gptVersion", function (result) {
       const gptVersion = result.gptVersion || "";
       if (gptVersion != "gpt4") {
@@ -365,11 +361,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // API Buttons
   apiButton1.addEventListener("click", function () {
-    console.log("apiButton1 clicked");
+    console.log("api set to true");
     chrome.storage.local.get("api", function (result) {
       const api = result.api || "";
-      if (api != true) {
-        chrome.storage.local.set({ api: true });
+      if (api != "true") {
+        chrome.storage.local.set({ api: "true" });
 
         apiButton1.style = "background-color: #E50914; border-color: #E50914";
         apiButton2.style = "background-color: #6c757d; border-color: #6c757d";
@@ -378,11 +374,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   apiButton2.addEventListener("click", function () {
-    console.log("apiButton2 clicked");
+    console.log("api set to false");
     chrome.storage.local.get("api", function (result) {
       const api = result.api || "";
-      if (api != false) {
-        chrome.storage.local.set({ api: false });
+      if (api != "false") {
+        chrome.storage.local.set({ api: "false" });
 
         apiButton1.style = "background-color: #6c757d; border-color: #6c757d";
         apiButton2.style = "background-color: #E50914; border-color: #E50914";
@@ -416,18 +412,42 @@ document.addEventListener("DOMContentLoaded", function () {
       popupContent.appendChild(pad);
 
       // send request to GPT
-      let promptType = "rec_similar_prefs";
-      let gptResponse = await getGPTRecommendation(titles, promptType);
-      let recommendations = gptResponse.split("|");
-      const currentDate = getCurrentDateTime();
+      chrome.storage.local.get("promptType", async function (result) {
+        const promptType = result.promptType || "simple";
+        chrome.storage.local.get("gptVersion", async function (result) {
+          const gptVersion = result.gptVersion || "gpt3";
+          chrome.storage.local.get("api", async function (result) {
+            const api = result.api || true;
+            let gptResponse = await getGPTRecommendation(
+              titles,
+              promptType,
+              gptVersion,
+              api
+            );
+            let recommendations = gptResponse.split("|");
 
-      // Save recommendations to local storage
-      chrome.storage.local.set({
-        recommendations: recommendations,
-        recommendation_dt: currentDate,
+            if (recommendations.length < 4) {
+              console.log("Not enough recommendations");
+              gptResponse = await getGPTRecommendation(
+                titles,
+                promptType,
+                gptVersion,
+                api
+              );
+              recommendations = gptResponse.split("|");
+            }
+            const currentDate = getCurrentDateTime();
+
+            // Save recommendations to local storage
+            chrome.storage.local.set({
+              recommendations: recommendations,
+              recommendation_dt: currentDate,
+            });
+
+            loadRecommendations();
+          });
+        });
       });
-
-      loadRecommendations();
     });
   }
 });

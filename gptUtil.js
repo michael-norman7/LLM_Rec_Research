@@ -4,8 +4,6 @@ const { openAIKey, movieDBKey } = keys;
 import getTitleInfo from "./movieAPI.js";
 
 const CHATGPT_END_POINT = "https://api.openai.com/v1/chat/completions";
-// const CHATGPT_MODEL = "gpt-3.5-turbo";
-const CHATGPT_MODEL = "gpt-4-0125-preview";
 
 function getMessages(titleOptions, prompt = "simple") {
   // prefs
@@ -33,7 +31,7 @@ function getMessages(titleOptions, prompt = "simple") {
 
           You will be penalized if you return any text other than the title names.
           Only return the exact names of the titles as I input them in the format
-          "<title>|<title>|<title>|<title>"`,
+          "|<title>|<title>|<title>|<title>|"`,
         },
       ];
       break;
@@ -78,7 +76,7 @@ function getMessages(titleOptions, prompt = "simple") {
 
           You will be penalized if you return any text other than the title names.
           Only return the exact names of the titles as I input them in the format
-          "<title>|<title>|<title>|<title>"`,
+          "|<title>|<title>|<title>|<title>|"`,
         },
         { role: "user", content: titleOptions },
       ];
@@ -87,28 +85,47 @@ function getMessages(titleOptions, prompt = "simple") {
   return messages;
 }
 
-export const getGPTRecommendation = async (titles, promptType, gptVersion, api) => {
+export const getGPTRecommendation = async (
+  titles,
+  promptType = "prefs",
+  gptVersion = "gpt4",
+  api = "false"
+) => {
+  console.log("Fetching GPT recommendation...");
+  console.log(`GPT version: ${gptVersion}`);
+  console.log(`API: ${api}`);
+  console.log(`Prompt type: ${promptType}`);
+
   let titleOptions = "Here are the titles I can choose from: \n";
 
-  // Just titles
-  titles.forEach((title) => {
-    titleOptions += title + ", ";
-  });
+  // optionally get title info with API
+  if (api == "true") {
+    // With title info
+    console.log("Fetching title infos...");
+    for (const title of titles) {
+      let titleInfo = await getTitleInfo(title);
+      titleOptions += `${title} (genres: ${titleInfo.genres}), `;
+    }
+  } else {
+    // Just titles
+    titles.forEach((title) => {
+      titleOptions += title + ", ";
+    });
+  }
 
-  // With title info
-  // for (const title of titles) {
-  //   let titleInfo = await getTitleInfo(title);
-  //   titleOptions += `${title} (genres: ${titleInfo.genres}), `;
-  // }
+  // Set GPT model
+  let CHATGPT_MODEL = "gpt-4-0125-preview";
+  if (gptVersion === "gpt3") {
+    CHATGPT_MODEL = "gpt-3.5-turbo";
+  }
 
   console.log(titleOptions);
 
-  // const sysMessage = { role: "system", content: sysPrompt };
-  // const userMessage = { role: "user", content: titleOptions };
   const chatGPTData = {
     model: CHATGPT_MODEL,
     messages: getMessages(titleOptions, promptType),
   };
+
   const requestOptions = {
     method: "POST",
     headers: {
