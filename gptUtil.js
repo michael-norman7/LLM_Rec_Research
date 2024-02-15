@@ -95,6 +95,8 @@ export const getGPTRecommendation = async (
   console.log(`GPT version: ${gptVersion}`);
   console.log(`API: ${api}`);
   console.log(`Prompt type: ${promptType}`);
+  console.log(`Titles: ${titles.length}`);
+  console.log(`Titles: ` + titles);
 
   let titleOptions = "Here are the titles I can choose from: \n";
 
@@ -114,12 +116,13 @@ export const getGPTRecommendation = async (
   }
 
   // Set GPT model
-  let CHATGPT_MODEL = "gpt-4-0125-preview";
+  // let CHATGPT_MODEL = "gpt-4-turbo-preview";
+  let CHATGPT_MODEL = "gpt-4";
   if (gptVersion === "gpt3") {
     CHATGPT_MODEL = "gpt-3.5-turbo";
   }
 
-  console.log(titleOptions);
+  // console.log(titleOptions);
 
   const chatGPTData = {
     model: CHATGPT_MODEL,
@@ -143,7 +146,7 @@ export const getGPTRecommendation = async (
 
     const responseData = await response.json();
     const message = responseData.choices[0].message.content;
-    console.log(message);
+    // console.log(message);
     return message;
   } catch (error) {
     console.error("Error:", error);

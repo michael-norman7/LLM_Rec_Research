@@ -1,5 +1,4 @@
 import { getGPTRecommendation } from "./gptUtil.js";
-import { getNetflixTop4 } from "./testing.js";
 
 function getCurrentDateTime() {
   function padZero(value) {
@@ -35,41 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const feedbackButton = document.getElementById("feedbackButton");
 
-  /*
-  const getNetflixTop4 = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      const activeTab = tabs[0];
-
-      chrome.scripting.executeScript({
-        target: { tabId: activeTab.id },
-        function: () => {
-          const rows = document.getElementsByClassName("lolomoRow");
-          let items = rows[0].getElementsByClassName("slider-refocus");
-          let names = Array.from(items).map((element) => {
-            return element.getAttribute("aria-label");
-          });
-
-          chrome.storage.local.set({ netflixTop4: names.slice(0, 4) });
-        },
-      });
-    });
-  };
-
-  getNetflixTop4();
-
-  const top4 = chrome.storage.local.get("netflixTop4", function (result) {
-    const res = result.netflixTop4 || [];
-
-    if (res == []) {
-      console.error("Error retrieving top 4 Netflix Titles.");
-    } else {
-      return res;
-    }
-  });
-  console.log("top4:");
-  console.log(top4);
-  */
-
   const loadRecommendations = async () => {
     // display recommendations
     chrome.storage.local.get("recommendations", function (result) {
@@ -87,8 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
         popupContent.innerHTML = "";
       } else {
         // get stored titles from storage
-        chrome.storage.local.get("titles", function (result) {
-          const titleDetails = result.titles || {};
+        chrome.storage.local.get("titleDetails", function (result) {
+          const titleDetails = result.titleDetails || {};
 
           buttonContainer.style.textAlign = "right";
 
@@ -122,11 +86,15 @@ document.addEventListener("DOMContentLoaded", function () {
           chrome.storage.local.get("gptVersion", function (result) {
             const gptVersion = result.gptVersion || "";
             if (gptVersion == "gpt3") {
-              gptButton1.style = "background-color: #E50914; border-color: #E50914";
-              gptButton2.style = "background-color: #6c757d; border-color: #6c757d";
+              gptButton1.style =
+                "background-color: #E50914; border-color: #E50914";
+              gptButton2.style =
+                "background-color: #6c757d; border-color: #6c757d";
             } else if (gptVersion == "gpt4") {
-              gptButton1.style = "background-color: #6c757d; border-color: #6c757d";
-              gptButton2.style = "background-color: #E50914; border-color: #E50914";
+              gptButton1.style =
+                "background-color: #6c757d; border-color: #6c757d";
+              gptButton2.style =
+                "background-color: #E50914; border-color: #E50914";
             }
           });
 
@@ -174,10 +142,13 @@ document.addEventListener("DOMContentLoaded", function () {
           recommendationContainer.style.alignItems = "center";
           popupContent.appendChild(recommendationContainer);
 
+          let shown_recommendations = [];
           let valid = 0;
           for (let i = 0; i < recommendations.length; ++i) {
             const title = recommendations[i];
             if (title in titleDetails) {
+              shown_recommendations.push(title);
+
               const recommendation = document.createElement("div");
               recommendation.style.display = "flex";
               recommendation.style.flexDirection = "column";
@@ -235,6 +206,21 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
             }
           }
+
+          // Log data on recommendations
+          console.log(shown_recommendations);
+
+          chrome.storage.local.get("titles", function (result) {
+            const current_titles = result.titles || [];
+
+            let positions = [];
+            for (let i = 0; i < 4; i++) {
+              positions.push(
+                current_titles.indexOf(shown_recommendations[i]) + 1
+              );
+            }
+            console.log("Recommendation positions: " + "[" + positions + "]");
+          });
         });
       }
 
@@ -262,15 +248,27 @@ document.addEventListener("DOMContentLoaded", function () {
         target: { tabId: activeTab.id },
         function: () => {
           let titleDetails = {};
+          let titles = [];
           const rows = document.getElementsByClassName("lolomoRow");
 
           for (let i = 0; i < rows.length - 1; ++i) {
-            let rowTitle =
-              rows[i].getElementsByClassName("row-header-title")[0].innerHTML;
+            let rowTitle;
+            try {
+              rowTitle =
+                rows[i].getElementsByClassName("row-header-title")[0].innerHTML;
+            } catch (error) {
+              rowTitle =
+                rows[i].getElementsByClassName("rowTitle")[0].innerHTML;
+            }
+
+            if (rowTitle == "Games") {
+              continue;
+            }
 
             let items = rows[i].getElementsByClassName("slider-refocus");
             for (let j = 0; j < items.length; ++j) {
               let titleName = items[j].ariaLabel;
+              titles.push(titleName);
 
               let details = {};
               details["img_link"] = items[j]
@@ -285,11 +283,20 @@ document.addEventListener("DOMContentLoaded", function () {
               } else {
                 titleDetails[titleName] = details;
               }
+
+              if (titles.length >= 100) {
+                break;
+              }
+            }
+            if (titles.length >= 100) {
+              break;
             }
           }
 
-          chrome.storage.local.set({ titles: titleDetails });
-          console.log(titleDetails);
+          console.log(titles.length + " titles scraped");
+
+          chrome.storage.local.set({ titleDetails: titleDetails });
+          chrome.storage.local.set({ titles: titles });
         },
       });
     });
@@ -388,10 +395,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function displayTitles() {
     // get titles from local storage
-    let titles = [];
     chrome.storage.local.get("titles", async function (result) {
-      titles = Object.keys(result.titles);
-      console.log(titles);
+      let titles = result.titles || [];
 
       // start loading
       popupContent.innerHTML = "";
@@ -426,6 +431,10 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             let recommendations = gptResponse.split("|");
 
+            // remove empty items from recommendations
+            recommendations = recommendations.filter((item) => item != "");
+
+            // Retry if not enough recommendations
             if (recommendations.length < 4) {
               console.log("Not enough recommendations");
               gptResponse = await getGPTRecommendation(
@@ -435,13 +444,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 api
               );
               recommendations = gptResponse.split("|");
+
+              // remove empty items from recommendations
+              recommendations = recommendations.filter((item) => item != "");
             }
-            const currentDate = getCurrentDateTime();
 
             // Save recommendations to local storage
             chrome.storage.local.set({
               recommendations: recommendations,
-              recommendation_dt: currentDate,
+              recommendation_dt: getCurrentDateTime(),
             });
 
             loadRecommendations();
