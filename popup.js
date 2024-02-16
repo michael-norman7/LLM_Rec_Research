@@ -284,11 +284,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 titleDetails[titleName] = details;
               }
 
-              if (titles.length >= 100) {
+              if (titles.length >= 50) {
                 break;
               }
             }
-            if (titles.length >= 100) {
+            if (titles.length >= 50) {
               break;
             }
           }

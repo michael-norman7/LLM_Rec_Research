@@ -20,11 +20,11 @@ title test set run many times in loop get %
 
 bias on where recs are on page (low/high)
 
-survey user netflix rec satisfaction
+survey user netflix rec satisfaction -eh
 
 include api vs not
 
-avg date of Netflix vs ext
+avg date of Netflix vs ext -eh
 
 gpt 3.5 vs 4
     *individual
