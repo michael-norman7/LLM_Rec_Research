@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
         target: { tabId: activeTab.id },
         function: () => {
           let titleDetails = {};
-          let titles = [];
+          let titles = new Set();
           const rows = document.getElementsByClassName("lolomoRow");
 
           for (let i = 0; i < rows.length - 1; ++i) {
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let items = rows[i].getElementsByClassName("slider-refocus");
             for (let j = 0; j < items.length; ++j) {
               let titleName = items[j].ariaLabel;
-              titles.push(titleName);
+              titles.add(titleName);
 
               let details = {};
               details["img_link"] = items[j]
@@ -284,15 +284,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 titleDetails[titleName] = details;
               }
 
-              if (titles.length >= 50) {
+              if (titles.size >= 50) {
                 break;
               }
             }
-            if (titles.length >= 50) {
+            if (titles.size >= 50) {
               break;
             }
           }
-
+          
+          titles = Array.from(titles);
+          console.log(titles);
           console.log(titles.length + " titles scraped");
 
           chrome.storage.local.set({ titleDetails: titleDetails });

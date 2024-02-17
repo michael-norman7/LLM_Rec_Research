@@ -71,7 +71,7 @@ function getMessages(titleOptions, prompt = "simple") {
         {
           role: "system",
           content: `You are a movie recommender system.
-          I will give you a list of movie or TV titles I can choose from on Netflix.
+          I will give you a list of movie or TV titles I can choose from.
           Recommend me only 4 titles from this list for me to watch.
 
           You will be penalized if you return any text other than the title names.
@@ -116,8 +116,8 @@ export const getGPTRecommendation = async (
   }
 
   // Set GPT model
-  // let CHATGPT_MODEL = "gpt-4-turbo-preview";
-  let CHATGPT_MODEL = "gpt-4";
+  let CHATGPT_MODEL = "gpt-4-turbo-preview";
+  // let CHATGPT_MODEL = "gpt-4";
   if (gptVersion === "gpt3") {
     CHATGPT_MODEL = "gpt-3.5-turbo";
   }
@@ -146,7 +146,7 @@ export const getGPTRecommendation = async (
 
     const responseData = await response.json();
     const message = responseData.choices[0].message.content;
-    // console.log(message);
+    console.log(message);
     return message;
   } catch (error) {
     console.error("Error:", error);
