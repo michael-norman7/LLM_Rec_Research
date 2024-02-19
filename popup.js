@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
             }
           }
-          
+
           titles = Array.from(titles);
           console.log(titles);
           console.log(titles.length + " titles scraped");
@@ -431,7 +431,7 @@ document.addEventListener("DOMContentLoaded", function () {
               gptVersion,
               api
             );
-            let recommendations = gptResponse.split("|");
+            let recommendations = gptResponse.toLowerCase().split("|");
 
             // remove empty items from recommendations
             recommendations = recommendations.filter((item) => item != "");
@@ -450,9 +450,6 @@ document.addEventListener("DOMContentLoaded", function () {
               // remove empty items from recommendations
               recommendations = recommendations.filter((item) => item != "");
             }
-
-            // make all recommendations lowercase
-            recommendations = recommendations.map((item) => item.toLowerCase());
 
             // Save recommendations to local storage
             chrome.storage.local.set({
