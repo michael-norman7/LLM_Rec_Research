@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let items = rows[i].getElementsByClassName("slider-refocus");
             for (let j = 0; j < items.length; ++j) {
-              let titleName = items[j].ariaLabel;
+              let titleName = items[j].ariaLabel.toLowerCase();
               titles.add(titleName);
 
               let details = {};
@@ -450,6 +450,9 @@ document.addEventListener("DOMContentLoaded", function () {
               // remove empty items from recommendations
               recommendations = recommendations.filter((item) => item != "");
             }
+
+            // make all recommendations lowercase
+            recommendations = recommendations.map((item) => item.toLowerCase());
 
             // Save recommendations to local storage
             chrome.storage.local.set({
